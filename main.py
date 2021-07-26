@@ -34,25 +34,29 @@ def sendEmail(messages):
 sendEmail('Hello, the server for email alerts for Nest WiFi refurbished is up. This system is made by Pranav.')
 
 while True:
-    link = "https://store.google.com/us/config/refurbished_nest_wifi_2points?hl=en-US"
-    r = requests.get(link) 
-    soup = BeautifulSoup(r.content, "html5lib")
-    text = soup.find_all(
-        "div", 
-        attrs = {
-            "class":"l5zTP ulDiod", 
-            "data-test":"status"
-        }
-    )
+    try:
+        link = "https://store.google.com/us/config/refurbished_nest_wifi_2points?hl=en-US"
+        r = requests.get(link) 
+        soup = BeautifulSoup(r.content, "html5lib")
+        text = soup.find_all(
+            "div", 
+            attrs = {
+                "class":"l5zTP ulDiod", 
+                "data-test":"status"
+            }
+        )
 
-    if (text[0].getText() != "Out of stock"):
-        if isArmed:
-            sendEmail('There is stock for the refurbished Nest WiFi. Look at this link. {}'.format(link))
-            isArmed = False
-        print("Query complete: In Stock")
-    else:
-        isArmed = True
-        print("Query complete: Out of Stock")
+        if (text[0].getText() != "Out of stock"):
+            if isArmed:
+                sendEmail('There is stock for the refurbished Nest WiFi. Look at this link. {}'.format(link))
+                isArmed = False
+            print("Query complete: In Stock")
+        else:
+            isArmed = True
+            print("Query complete: Out of Stock")
 
-    time.sleep(10)
+        time.sleep(10)
+        
+    except:
+        pass
     
